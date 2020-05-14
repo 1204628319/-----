@@ -7,6 +7,4 @@ import java.util.List;
 public interface PayOrderMapper extends SuperMapper<PayOrder> {
 
     List<PayOrder> selectOrder(String authCode);
-
-    String selectMinDayOrderAmtCertId(String today);
 }

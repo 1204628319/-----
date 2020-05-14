@@ -7,16 +7,4 @@
         WHERE AUTH_CODE = #{authCode}
         ORDER BY CREATE_TIME DESC
     </select>
-
-    <select id="selectMinDayOrderAmtCertId" parameterType="string" resultType="string">
-        SELECT CERT_ID FROM
-        (
-        SELECT SUM(ORDER_AMT) dayOrderAmt,CERT_ID
-        FROM pay_order
-        WHERE pay_date = #{today} AND PAY_STATUS IN ('payed','paying')
-        GROUP BY CERT_ID,PAY_STATUS
-        ) e
-        ORDER BY e.dayOrderAmt ASC
-        LIMIT 1
-    </select>
 </mapper>

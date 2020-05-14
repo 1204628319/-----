@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.greatwall.jhgx.mapper.MemberMapper">
+    <select id="selectMinDayOrderAmtMember" parameterType="string" resultType="com.greatwall.jhgx.domain.Member">
+        SELECT member.*
+        FROM member LEFT JOIN
+        (
+        SELECT SUM(ORDER_AMT) dayOrderAmt,CERT_ID
+        FROM pay_order
+        WHERE pay_date = #{payDate} AND PAY_STATUS IN ('payed','paying')
+        GROUP BY CERT_ID
+        )e ON e.CERT_ID = member.CERT_ID
+        WHERE member.SIGN_STATUS = 'signed'
+        ORDER BY dayOrderAmt ASC LIMIT 1
+    </select>
 </mapper>

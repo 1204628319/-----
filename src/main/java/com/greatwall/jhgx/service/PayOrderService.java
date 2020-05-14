@@ -7,6 +7,4 @@ import java.util.List;
 
 public interface PayOrderService extends ISuperService<PayOrder> {
     List<PayOrder> selectOrder(String authCode);
-
-    String selectMinDayOrderAmtCertId(String today);
 }

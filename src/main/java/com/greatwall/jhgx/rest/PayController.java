@@ -103,24 +103,6 @@ public class PayController {
     private String payConfigConsRate;
 
     /**
-     * 进件人身份证号
-     */
-    @Value("${payConfig.certId}")
-    private String payConfigCertId;
-
-    /**
-     * 进件人手机号码
-     */
-    @Value("${payConfig.mobile}")
-    private String payConfigMobile;
-
-    /**
-     * 进件人银行卡号
-     */
-    @Value("${payConfig.cardNo}")
-    private String payConfigCardNo;
-
-    /**
      * 支付通知url
      */
     @Value("${payConfig.notifyUrl}")
@@ -325,7 +307,7 @@ public class PayController {
         // 获取进件人
         Member member = getMinDayAmtTotalMember();
         if (member == null) {
-            return Result.fail("没有已注册的进件人");
+            return Result.fail("没有可使用的进件人");
         }
 
         String orderAmt = Integer.toString(CurrencyUtils.parseCNY2Cent(Double.valueOf(payOrder.getOrderAmtByYuan())));
@@ -454,13 +436,7 @@ public class PayController {
      * @return
      */
     private Member getMinDayAmtTotalMember() {
-        String certId = payOrderService.selectMinDayOrderAmtCertId(DateUtil.currentTimestamp2String(DateUtil.PATTERN_DATE));
-        QueryWrapper<Member> memberQueryWrapper = new QueryWrapper();
-        memberQueryWrapper.eq("SIGN_STATUS", "signed");
-        if (StringUtils.isNotEmpty(certId)) {
-            memberQueryWrapper.eq("CERT_ID", certId);
-        }
-        return memberService.getOne(memberQueryWrapper);
+        return memberService.selectMinDayOrderAmtMember(DateUtil.currentTimestamp2String(DateUtil.PATTERN_DATE));
     }
 
     private String syncMember(Member member) {
@@ -535,7 +511,7 @@ public class PayController {
     }
 
     private String getMerOrderId() {
-        String merOrderId = "P" + (StringUtils.isNotEmpty(payConfigMerchantId) ? payConfigMerchantId : payConfigCertId ) + System.currentTimeMillis() + (int)(1+Math.random()*(100-1+1));
+        String merOrderId = "P" + payConfigMerchantId + System.currentTimeMillis() + (int)(1+Math.random()*(100-1+1));
         if (merOrderId.length() > 35) {
             return merOrderId.substring(0, 34);
         } else {

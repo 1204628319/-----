@@ -1,7 +1,6 @@
 package com.greatwall.jhgx.service.impl;
 
 import com.greatwall.component.ccyl.common.service.impl.SuperServiceImpl;
-import com.greatwall.jhgx.domain.Member;
 import com.greatwall.jhgx.domain.PayOrder;
 import com.greatwall.jhgx.mapper.PayOrderMapper;
 import com.greatwall.jhgx.service.PayOrderService;
@@ -15,10 +14,5 @@ public class PayOrderServiceImpl extends SuperServiceImpl<PayOrderMapper, PayOrd
     @Override
     public List<PayOrder> selectOrder(String authCode) {
         return baseMapper.selectOrder(authCode);
-    }
-
-    @Override
-    public String selectMinDayOrderAmtCertId(String today) {
-        return baseMapper.selectMinDayOrderAmtCertId(today);
     }
 }
